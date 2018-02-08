@@ -1,0 +1,8 @@
+{
+  "minimum-stability": "dev",
+  "prefer-stable" : true,
+  "require": {
+    "wixel/gump": "dev-master",
+    "phpunit/phpunit": "^5"
+  }
+}
