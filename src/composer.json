@@ -3,6 +3,7 @@
   "prefer-stable" : true,
   "require": {
     "wixel/gump": "dev-master",
-    "phpunit/phpunit": "^5"
+    "phpunit/phpunit": "^5",
+    "zendframework/zend-escaper": "^2.5"
   }
 }

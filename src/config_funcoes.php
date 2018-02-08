@@ -2,7 +2,6 @@
 
 require "vendor/autoload.php";
 
-
 /**
  * Valida e higieniza os valores do array
  *
@@ -13,8 +12,8 @@ require "vendor/autoload.php";
  * @return Object
  */
 function fHigienizaInput($aDados, $aValidacoes = [], $aFiltros = []) {
-  $oGump = new GUMP();
 
+  $oGump = new GUMP();
  // $aDados = $oGump->sanitize($aDados);
 
   if (!empty($aValidacoes))
@@ -75,4 +74,37 @@ function fHigienizaGet($aValidacoes = [], $aFiltros = []) {
     $_GET = $oRet->aErros;
 
   return $oRet->bOk;
+}
+
+
+/**
+ * Aplica o 'escape' na string e retorna o
+ * resultado
+ *
+ * @param string $sConteudo - Conteúdo
+ * @param string $sTipo - Tipo do conteúdo: html, css, js, url ou attr
+ *
+ * @return string
+ */
+function fE($sConteudo, $sTipo = 'html') {
+
+  $oEscaper = new Zend\Escaper\Escaper('utf-8');
+
+  switch (strtolower($sTipo)) {
+    case 'css':
+      return $oEscaper->escapeCss($sConteudo);
+    break;
+    case 'url':
+      return $oEscaper->escapeUrl($sConteudo);
+    break;
+    case 'attr':
+      return $oEscaper->escapeHtmlAttr($sConteudo);
+    break;
+    case 'js':
+      return $oEscaper->escapeJs($sConteudo);
+    break;
+    default:
+      return $oEscaper->escapeHtml($sConteudo);
+    break;
+  }
 }
