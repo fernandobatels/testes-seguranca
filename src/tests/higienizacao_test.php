@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-final class ConfigFuncoesTest extends TestCase {
+final class HigienizacaoTest extends TestCase {
 
   public function testSanidade() {
 

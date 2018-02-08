@@ -15,7 +15,7 @@ require "vendor/autoload.php";
 function fHigienizaInput($aDados, $aValidacoes = [], $aFiltros = []) {
   $oGump = new GUMP();
 
-  $aDados = $oGump->sanitize($aDados);
+ // $aDados = $oGump->sanitize($aDados);
 
   if (!empty($aValidacoes))
     $oGump->validation_rules($aValidacoes);
