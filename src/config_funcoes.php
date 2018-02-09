@@ -76,7 +76,6 @@ function fHigienizaGet($aValidacoes = [], $aFiltros = []) {
   return $oRet->bOk;
 }
 
-
 /**
  * Aplica o 'escape' na string e retorna o
  * resultado
@@ -107,4 +106,78 @@ function fE($sConteudo, $sTipo = 'html') {
       return $oEscaper->escapeHtml($sConteudo);
     break;
   }
+}
+
+/**
+ * Gera e retorna um input html 5 com um
+ * token para controle CSRF
+ *
+ * @param string $sTokenId - Identificação do token
+ *
+ * @return string - Input pronto para uso
+ */
+function fCsrfInputBuilder($sTokenId) {
+
+  if (session_status() == PHP_SESSION_NONE) {
+    throw new Exception('Nenhuma sessão iniciada!');
+  }
+
+  $oManager = new Symfony\Component\Security\Csrf\CsrfTokenManager();
+
+  $sInput = '<input type="hidden" name="_csrf" value="%s">';
+
+  return sprintf($sInput, $oManager->getToken($sTokenId));
+}
+
+/**
+ * Retorna se o token csrf é válido
+ *
+ * @param string $sTokenId - Identificação do token
+ * @param array $aRecebido - Array, do método HTTP, com o token recebido. Exemplos: $_POST e $_GET
+ * @param boolean $bRemover - Se a função deve já remover o token do armazenamento
+ *
+ * @return boolean - Se o token é válido
+ */
+function fCsrfTokenIsValid($sTokenId, $aRecebido, $bRemover = true) {
+
+  if (empty($aRecebido['_csrf']))
+    return false;
+
+  if (session_status() == PHP_SESSION_NONE)
+    throw new Exception('Nenhuma sessão iniciada!');
+
+  $oManager = new Symfony\Component\Security\Csrf\CsrfTokenManager();
+
+  $oToken = new Symfony\Component\Security\Csrf\CsrfToken($sTokenId, $aRecebido['_csrf']);
+
+  $bIsValid = $oManager->isTokenValid($oToken);
+
+  if ($bRemover)
+    $oManager->removeToken($oToken);
+
+  return $bIsValid;
+}
+
+/**
+ * Retorna se o token csrf, via $_GET, é válido
+ *
+ * @param string $sTokenId - Identificação do token
+ * @param boolean $bRemover - Se a função deve já remover o token do armazenamento
+ *
+ * @return boolean - Se o token é válido
+ */
+function fCsrfTokenIsValidGet($sTokenId, $bRemover = true) {
+  return fCsrfTokenIsValid($sTokenId, $_GET, $bRemover);
+}
+
+/**
+ * Retorna se o token csrf, via $_POST, é válido
+ *
+ * @param string $sTokenId - Identificação do token
+ * @param boolean $bRemover - Se a função deve já remover o token do armazenamento
+ *
+ * @return boolean - Se o token é válido
+ */
+function fCsrfTokenIsValidPost($sTokenId, $bRemover = true) {
+  return fCsrfTokenIsValid($sTokenId, $_POST, $bRemover);
 }

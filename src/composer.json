@@ -4,6 +4,7 @@
   "require": {
     "wixel/gump": "dev-master",
     "phpunit/phpunit": "^5",
-    "zendframework/zend-escaper": "^2.5"
+    "zendframework/zend-escaper": "^2.5",
+    "symfony/security-csrf": "^2.4"
   }
 }
